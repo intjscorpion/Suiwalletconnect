@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sentress Realm Wallet Connect</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mysten/wallet-standard@latest/dist/index.global.js"></script>
+  <style>
+    body {
+      background-color: #1a102b;
+      color: #e0e0ff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      background-color: #8f52ff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #8f52ff;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #7a40e0;
+    }
+    #wallet-address {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #b6b8ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Connect to the Sentress Realm</h1>
+  <p>Secure your access with a Sui-compatible wallet</p>
+  <button id="connect-wallet-btn">Connect Sui Wallet</button>
+  <p id="wallet-address"></p>
+
+  <script>
+    const btn = document.getElementById('connect-wallet-btn');
+    const addressDisplay = document.getElementById('wallet-address');
+
+    btn.onclick = async () => {
+      const wallets = window.navigator.wallets;
+      if (!wallets || !wallets.get) {
+        alert("No Sui-compatible wallet found. Please install Suiet, Surf, or Ethos.");
+        return;
+      }
+
+      const wallet = await wallets.get();
+      const accounts = await wallet.request({ method: 'sui_connect' });
+
+      if (accounts.length > 0) {
+        const address = accounts[0].address;
+        addressDisplay.textContent = `Connected Address: ${address}`;
+      } else {
+        addressDisplay.textContent = "Wallet connection failed.";
+      }
+    };
+  </script>
+</body>
+</html>
